@@ -1,0 +1,167 @@
+[
+	{
+		"name": "b64-1.md",
+		"real": 1397,
+		"est": 1355
+	},
+	{
+		"name": "b64-2.md",
+		"real": 989,
+		"est": 967
+	},
+	{
+		"name": "b64-3.md",
+		"real": 1070,
+		"est": 820
+	},
+	{
+		"name": "b64-4.md",
+		"real": 911,
+		"est": 897
+	},
+	{
+		"name": "cjk-1.md",
+		"real": 497,
+		"est": 494
+	},
+	{
+		"name": "cjk-2.md",
+		"real": 757,
+		"est": 586
+	},
+	{
+		"name": "cjk-3.md",
+		"real": 413,
+		"est": 440
+	},
+	{
+		"name": "cjk-4.md",
+		"real": 791,
+		"est": 678
+	},
+	{
+		"name": "cjk-5.md",
+		"real": 480,
+		"est": 402
+	},
+	{
+		"name": "code-1.md",
+		"real": 673,
+		"est": 785
+	},
+	{
+		"name": "code-2.md",
+		"real": 712,
+		"est": 810
+	},
+	{
+		"name": "code-3.md",
+		"real": 836,
+		"est": 953
+	},
+	{
+		"name": "code-4.md",
+		"real": 941,
+		"est": 965
+	},
+	{
+		"name": "code-5.md",
+		"real": 690,
+		"est": 733
+	},
+	{
+		"name": "emoji-1.md",
+		"real": 571,
+		"est": 467
+	},
+	{
+		"name": "emoji-2.md",
+		"real": 682,
+		"est": 573
+	},
+	{
+		"name": "emoji-3.md",
+		"real": 550,
+		"est": 343
+	},
+	{
+		"name": "emoji-4.md",
+		"real": 377,
+		"est": 344
+	},
+	{
+		"name": "emoji-5.md",
+		"real": 779,
+		"est": 658
+	},
+	{
+		"name": "english-1.md",
+		"real": 2300,
+		"est": 2433
+	},
+	{
+		"name": "english-2.md",
+		"real": 2194,
+		"est": 2347
+	},
+	{
+		"name": "english-3.md",
+		"real": 2186,
+		"est": 2365
+	},
+	{
+		"name": "english-4.md",
+		"real": 2370,
+		"est": 2496
+	},
+	{
+		"name": "english-5.md",
+		"real": 2254,
+		"est": 2427
+	},
+	{
+		"name": "english-6.md",
+		"real": 2227,
+		"est": 2361
+	},
+	{
+		"name": "english-7.md",
+		"real": 2303,
+		"est": 2425
+	},
+	{
+		"name": "english-8.md",
+		"real": 164,
+		"est": 170
+	},
+	{
+		"name": "english-9.md",
+		"real": 343,
+		"est": 336
+	},
+	{
+		"name": "table-1.md",
+		"real": 847,
+		"est": 736
+	},
+	{
+		"name": "table-2.md",
+		"real": 514,
+		"est": 531
+	},
+	{
+		"name": "table-3.md",
+		"real": 823,
+		"est": 912
+	},
+	{
+		"name": "table-4.md",
+		"real": 181,
+		"est": 183
+	},
+	{
+		"name": "table-5.md",
+		"real": 296,
+		"est": 270
+	}
+]

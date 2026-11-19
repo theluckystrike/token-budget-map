@@ -1,0 +1,101 @@
+/* Token Budget Map */
+.tbm-statusbar {
+	cursor: pointer;
+}
+
+.tbm-statusbar.tbm-hidden {
+	display: none;
+}
+
+.tbm-view {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+}
+
+.tbm-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-2);
+	align-items: center;
+}
+
+.tbm-status,
+.tbm-more,
+.tbm-empty {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.tbm-crumbs {
+	font-size: var(--font-ui-small);
+}
+
+.tbm-total {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-2-1);
+}
+
+.tbm-total-name {
+	font-weight: var(--font-semibold);
+}
+
+.tbm-fits {
+	color: var(--text-success);
+}
+
+.tbm-over {
+	color: var(--text-error);
+}
+
+.tbm-near {
+	color: var(--text-warning);
+}
+
+.tbm-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-2-1);
+}
+
+.tbm-row {
+	--tbm-share: 0%;
+
+	display: grid;
+	grid-template-columns: 1fr auto 4.5em;
+	gap: var(--size-4-2);
+	padding: var(--size-2-2) var(--size-4-2);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	background: linear-gradient(to right, var(--background-modifier-hover) var(--tbm-share), transparent var(--tbm-share));
+}
+
+.tbm-row:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.tbm-row.tbm-over {
+	background: linear-gradient(to right, rgb(var(--color-red-rgb), 0.18) 100%, transparent 100%);
+}
+
+.tbm-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tbm-folder .tbm-name {
+	font-weight: var(--font-semibold);
+}
+
+.tbm-num,
+.tbm-share {
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+	color: var(--text-muted);
+}
+
+.tbm-row.tbm-near-row {
+	background: linear-gradient(to right, rgb(var(--color-yellow-rgb), 0.2) var(--tbm-share), transparent var(--tbm-share));
+}

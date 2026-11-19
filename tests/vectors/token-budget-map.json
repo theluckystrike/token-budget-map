@@ -1,0 +1,389 @@
+{
+ "slug": "token-budget-map",
+ "module": "token-budget-map/src/estimate",
+ "function": "estimateTokens",
+ "note": "Each case names its function in fn. estimateTokens and shortTokens are in src/estimate.ts. noteClasses and needTokens are in src/accuracy.ts. parseSize, parseWindows, fitIn and percent are in src/budget.ts. A name that starts with a number is the acceptance case of BRIEF.md that it checks.",
+ "cases": [
+  {
+   "name": "1 empty note costs 0 tokens",
+   "fn": "estimateTokens",
+   "args": [
+    ""
+   ],
+   "expected": 0
+  },
+  {
+   "name": "1 short words cost one token each and the space joins the word",
+   "fn": "estimateTokens",
+   "args": [
+    "Hello world."
+   ],
+   "expected": 3
+  },
+  {
+   "name": "1 a long word costs one token per 5 letters",
+   "fn": "estimateTokens",
+   "args": [
+    "internationalization"
+   ],
+   "expected": 4
+  },
+  {
+   "name": "1 a word of 9 letters costs one token",
+   "fn": "estimateTokens",
+   "args": [
+    "knowledge"
+   ],
+   "expected": 1
+  },
+  {
+   "name": "1 a word of 11 letters costs 3 tokens",
+   "fn": "estimateTokens",
+   "args": [
+    "abcdefghijk"
+   ],
+   "expected": 3
+  },
+  {
+   "name": "1 numbers cost one token per 3 digits",
+   "fn": "estimateTokens",
+   "args": [
+    "12345678"
+   ],
+   "expected": 3
+  },
+  {
+   "name": "1 frontmatter counts",
+   "fn": "estimateTokens",
+   "args": [
+    "---\ntitle: Plan\n---\n"
+   ],
+   "expected": 8
+  },
+  {
+   "name": "1 accented letters cost one token per 2 letters",
+   "fn": "estimateTokens",
+   "args": [
+    "Zażółć gęślą jaźń"
+   ],
+   "expected": 8
+  },
+  {
+   "name": "1 each Han or kana character costs 0.7 tokens, rounded at the end",
+   "fn": "estimateTokens",
+   "args": [
+    "東京は晴れ"
+   ],
+   "expected": 4
+  },
+  {
+   "name": "1 a Chinese line",
+   "fn": "estimateTokens",
+   "args": [
+    "人工智能代理读取笔记"
+   ],
+   "expected": 7
+  },
+  {
+   "name": "1 a Hangul line counts each syllable as wide",
+   "fn": "estimateTokens",
+   "args": [
+    "한국어 텍스트를 읽습니다"
+   ],
+   "expected": 8
+  },
+  {
+   "name": "1 a second Hangul line",
+   "fn": "estimateTokens",
+   "args": [
+    "좋은 아침입니다"
+   ],
+   "expected": 5
+  },
+  {
+   "name": "1 emoji with zero width joiners and skin tones",
+   "fn": "estimateTokens",
+   "args": [
+    "Team 👨‍👩‍👧 says 👍🏽👍🏽 ok"
+   ],
+   "expected": 17
+  },
+  {
+   "name": "1 symbols with a variation selector",
+   "fn": "estimateTokens",
+   "args": [
+    "❤️ ✅ ★"
+   ],
+   "expected": 3
+  },
+  {
+   "name": "1 an astral letter keeps its surrogate pair together",
+   "fn": "estimateTokens",
+   "args": [
+    "𝒜𝒜𝒜𝒜"
+   ],
+   "expected": 4
+  },
+  {
+   "name": "1 base64 in a data URI costs one token per 1.5 characters",
+   "fn": "estimateTokens",
+   "args": [
+    "img data:image/png;base64,QUJDRGVmZ2gxMjM0NTY3OAQUJDRGVmZ2gxMjM0NTY3OAQUJDRGVmZ2gxMjM0NTY3OAQUJDRGVmZ2gxMjM0NTY3OA"
+   ],
+   "expected": 69
+  },
+  {
+   "name": "1 many emoji mark the note as rough",
+   "fn": "noteClasses",
+   "args": [
+    "a 😀😀😀😀😀 b"
+   ],
+   "expected": [
+    "emoji"
+   ]
+  },
+  {
+   "name": "1 plain prose is not rough",
+   "fn": "noteClasses",
+   "args": [
+    "Plain prose only here."
+   ],
+   "expected": []
+  },
+  {
+   "name": "1 a run of blank lines costs one token",
+   "fn": "estimateTokens",
+   "args": [
+    "a\n\n\nb"
+   ],
+   "expected": 3
+  },
+  {
+   "name": "1 each emoji costs 2 tokens",
+   "fn": "estimateTokens",
+   "args": [
+    "emoji 🎉🎉 ok"
+   ],
+   "expected": 6
+  },
+  {
+   "name": "4 window size 128k",
+   "fn": "parseSize",
+   "args": [
+    "128k"
+   ],
+   "expected": 128000
+  },
+  {
+   "name": "4 window size 1M",
+   "fn": "parseSize",
+   "args": [
+    "1M"
+   ],
+   "expected": 1000000
+  },
+  {
+   "name": "4 window size with a comma",
+   "fn": "parseSize",
+   "args": [
+    "200,000"
+   ],
+   "expected": 200000
+  },
+  {
+   "name": "4 a size of 0 is refused",
+   "fn": "parseSize",
+   "args": [
+    "0"
+   ],
+   "expected": null
+  },
+  {
+   "name": "4 window list skips comments and reports bad and repeated lines",
+   "fn": "parseWindows",
+   "args": [
+    "A = 32k\n# c\n\nB=1M\nbad line\nA = 2"
+   ],
+   "expected": {
+    "windows": [
+     {
+      "name": "A",
+      "tokens": 32000
+     },
+     {
+      "name": "B",
+      "tokens": 1000000
+     }
+    ],
+    "errors": [
+     "Line 5 needs a name, an equals sign and a size, for example \"My model = 128k\".",
+     "Line 6 repeats the name \"A\"."
+    ]
+   }
+  },
+  {
+   "name": "5 content fits inside the window minus the reserve",
+   "fn": "fitIn",
+   "args": [
+    100000,
+    {
+     "name": "M",
+     "tokens": 128000
+    },
+    4000
+   ],
+   "expected": {
+    "fits": true,
+    "state": "fits",
+    "share": 0.8064516129032258,
+    "room": 24000,
+    "usable": 124000
+   }
+  },
+  {
+   "name": "5 content over the usable window does not fit",
+   "fn": "fitIn",
+   "args": [
+    130000,
+    {
+     "name": "M",
+     "tokens": 128000
+    },
+    4000
+   ],
+   "expected": {
+    "fits": false,
+    "state": "over",
+    "share": 1.0483870967741935,
+    "room": -6000,
+    "usable": 124000
+   }
+  },
+  {
+   "name": "5 exactly the usable window fits",
+   "fn": "fitIn",
+   "args": [
+    124000,
+    {
+     "name": "M",
+     "tokens": 128000
+    },
+    4000
+   ],
+   "expected": {
+    "fits": true,
+    "state": "fits",
+    "share": 1,
+    "room": 0,
+    "usable": 124000
+   }
+  },
+  {
+   "name": "5 the estimate fits but the planned tokens do not, so it is near the limit",
+   "fn": "fitIn",
+   "args": [
+    110000,
+    {
+     "name": "M",
+     "tokens": 128000
+    },
+    4000,
+    130000
+   ],
+   "expected": {
+    "fits": false,
+    "state": "near",
+    "share": 0.8870967741935484,
+    "room": -6000,
+    "usable": 124000
+   }
+  },
+  {
+   "name": "5 planned tokens inside the window fit",
+   "fn": "fitIn",
+   "args": [
+    100000,
+    {
+     "name": "M",
+     "tokens": 128000
+    },
+    4000,
+    120000
+   ],
+   "expected": {
+    "fits": true,
+    "state": "fits",
+    "share": 0.8064516129032258,
+    "room": 4000,
+    "usable": 124000
+   }
+  },
+  {
+   "name": "5 an emoji note plans for the largest margin",
+   "fn": "needTokens",
+   "args": [
+    620,
+    [
+     "emoji"
+    ]
+   ],
+   "expected": 1000
+  },
+  {
+   "name": "5 a prose note plans for the prose margin",
+   "fn": "needTokens",
+   "args": [
+    920,
+    []
+   ],
+   "expected": 1000
+  },
+  {
+   "name": "1 a JWT counts as base64",
+   "fn": "noteClasses",
+   "args": [
+    "Token eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiAwLCAiZXhwIjogMTc2MzUwMDAwMH0.o6wHPSKmsz5xVtP9vKQMADVORgH8z_wup4itghUM62k"
+   ],
+   "expected": [
+    "base64"
+   ]
+  },
+  {
+   "name": "5 a base64 note plans for the largest margin, like emoji",
+   "fn": "needTokens",
+   "args": [
+    620,
+    [
+     "base64"
+    ]
+   ],
+   "expected": 1000
+  },
+  {
+   "name": "1 a note that mixes English and Japanese counts as CJK",
+   "fn": "noteClasses",
+   "args": [
+    "Meeting notes 会議の議事録と次の予定を確認する for the team today"
+   ],
+   "expected": [
+    "cjk"
+   ]
+  },
+  {
+   "name": "5 share under 1 percent",
+   "fn": "percent",
+   "args": [
+    0.004
+   ],
+   "expected": "under 1 %"
+  },
+  {
+   "name": "3 short count for the window list",
+   "fn": "shortTokens",
+   "args": [
+    12345
+   ],
+   "expected": "12.3k"
+  }
+ ]
+}

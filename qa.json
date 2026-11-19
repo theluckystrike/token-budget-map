@@ -1,0 +1,60 @@
+[
+	{
+		"feature": "token-budget-map",
+		"caption": "Open the token map, choose a window and export the fit report.",
+		"frames": [
+			{
+				"note": "Projects/Project brief.md",
+				"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const keep = app.workspace.getMostRecentLeaf(); app.workspace.getLeavesOfType('markdown').forEach((l) => { if (l !== keep) l.detach(); }); p.settings.activeWindow = 'Small window'; await p.saveSettings(); if (!p.__qaIsPro) { p.__qaIsPro = p.pro.isPro; p.pro.isPro = () => true; [...p.pro.listeners].forEach((l) => l()); } app.workspace.detachLeavesOfType('token-budget-map'); const e = app.workspace.activeEditor?.editor; if (!e) throw new Error('no editor'); e.setSelection({ line: 4, ch: 0 }, { line: 9, ch: 0 }); p.updateStatus(); await new Promise((r) => setTimeout(r, 400)); const t = document.querySelector('.tbm-statusbar')?.textContent ?? ''; if (!/^≈[0-9,]+ tokens, ≈[0-9,]+ selected$/.test(t)) throw new Error('status bar ' + t); return 'note'; })()",
+				"hold": 1600,
+				"wait": 800
+			},
+			{
+				"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; if (!p.__qaIsPro) { p.__qaIsPro = p.pro.isPro; p.pro.isPro = () => true; [...p.pro.listeners].forEach((l) => l()); } app.workspace.rightSplit.setSize(520); await p.openMap(); await p.refreshMap(); const v = app.workspace.getLeavesOfType('token-budget-map')[0].view; v.openFolder('Token Budget Map'); await new Promise((r) => setTimeout(r, 400)); const rows = [...v.contentEl.querySelectorAll('.tbm-row')].map((r) => r.textContent); if (rows.length < 2) throw new Error('map rows ' + rows.join(' | ')); if (!rows.every((r) => /%$/.test(r))) throw new Error('no share ' + rows.join(' | ')); return 'map'; })()",
+				"hold": 2000,
+				"wait": 900
+			},
+			{
+				"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; await p.setActiveWindow('Medium window'); const v = app.workspace.getLeavesOfType('token-budget-map')[0].view; v.openFolder('Token Budget Map/Projects'); await new Promise((r) => setTimeout(r, 400)); const s = v.contentEl.querySelector('select'); if (s?.value !== 'Medium window') throw new Error('window ' + s?.value); const rows = [...v.contentEl.querySelectorAll('.tbm-row')].map((r) => r.textContent); if (rows.length < 2) throw new Error('map rows ' + rows.join(' | ')); if (!rows.every((r) => /%$/.test(r))) throw new Error('no share ' + rows.join(' | ')); return 'window'; })()",
+				"hold": 2000,
+				"wait": 900
+			},
+			{
+				"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const path = await p.exportReport(); if (!path) throw new Error('no report'); await new Promise((r) => setTimeout(r, 400)); const t = await app.vault.adapter.read(path); if (!t.includes('Whole vault') || !/does not fit|fits/i.test(t)) throw new Error('report ' + t.slice(0, 200)); document.querySelectorAll('.notice-container .notice').forEach((n) => n.remove()); return 'report'; })()",
+				"hold": 2600,
+				"wait": 1200
+			}
+		]
+	},
+	{
+		"feature": "status-bar",
+		"caption": "The status bar shows the estimated tokens of the note and of the selection.",
+		"note": "Projects/Project brief.md",
+		"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const keep = app.workspace.getMostRecentLeaf(); app.workspace.getLeavesOfType('markdown').forEach((l) => { if (l !== keep) l.detach(); }); p.settings.activeWindow = 'Small window'; await p.saveSettings(); if (p.__qaIsPro) { p.pro.isPro = p.__qaIsPro; delete p.__qaIsPro; [...p.pro.listeners].forEach((l) => l()); } app.workspace.detachLeavesOfType('token-budget-map'); p.settings.activeWindow = 'Medium window'; await p.saveSettings(); const e = app.workspace.activeEditor?.editor; if (!e) throw new Error('no editor'); e.setSelection({ line: 4, ch: 0 }, { line: 9, ch: 0 }); p.updateStatus(); await new Promise((r) => setTimeout(r, 400)); const t = document.querySelector('.tbm-statusbar')?.textContent ?? ''; if (!/^≈[0-9,]+ tokens, ≈[0-9,]+ selected$/.test(t)) throw new Error('status bar ' + t); return 'status bar PASS ' + t; })()",
+		"wait": 900
+	},
+	{
+		"feature": "token-map",
+		"caption": "The token map lists folders by tokens with their share of the window.",
+		"note": "Projects/Project brief.md",
+		"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const keep = app.workspace.getMostRecentLeaf(); app.workspace.getLeavesOfType('markdown').forEach((l) => { if (l !== keep) l.detach(); }); p.settings.activeWindow = 'Small window'; await p.saveSettings(); if (!p.__qaIsPro) { p.__qaIsPro = p.pro.isPro; p.pro.isPro = () => true; [...p.pro.listeners].forEach((l) => l()); } app.workspace.rightSplit.setSize(520); await p.openMap(); await p.refreshMap(); const v = app.workspace.getLeavesOfType('token-budget-map')[0].view; v.openFolder('Token Budget Map/Projects'); const nl = app.workspace.getLeavesOfType('markdown')[0]; if (nl) app.workspace.setActiveLeaf(nl, { focus: true }); p.updateStatus(); await new Promise((r) => setTimeout(r, 400)); const rows = [...v.contentEl.querySelectorAll('.tbm-row')].map((r) => r.textContent); if (rows.length < 2) throw new Error('map rows ' + rows.join(' | ')); if (!rows.every((r) => /%$/.test(r))) throw new Error('no share ' + rows.join(' | ')); return 'token map PASS (QA entitlement)'; })()",
+		"wait": 1200,
+		"after": "(async () => { const p = app.plugins.plugins['token-budget-map']; if (p.__qaIsPro) { p.pro.isPro = p.__qaIsPro; delete p.__qaIsPro; [...p.pro.listeners].forEach((l) => l()); } return 'ok'; })()"
+	},
+	{
+		"feature": "windows",
+		"caption": "The settings list model windows by name and size.",
+		"note": "Projects/Project brief.md",
+		"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); if (p.__qaIsPro) { p.pro.isPro = p.__qaIsPro; delete p.__qaIsPro; [...p.pro.listeners].forEach((l) => l()); } app.workspace.detachLeavesOfType('token-budget-map'); app.setting.open(); app.setting.openTabById('token-budget-map'); await new Promise((r) => setTimeout(r, 400)); const name = [...document.querySelectorAll('.modal-container .setting-item-name')].find((e) => e.textContent === 'Model windows'); if (!name) throw new Error('no Model windows setting'); const item = name.closest('.setting-item'); const ta = item.querySelector('textarea'); if (!ta || !ta.value.includes('Medium window = 128k')) throw new Error('windows text ' + ta?.value); item.scrollIntoView({ block: 'start' }); const sc = item.closest('.vertical-tab-content'); if (sc) sc.scrollTop = Math.max(0, sc.scrollTop - 90); return 'settings PASS'; })()",
+		"wait": 1000,
+		"after": "(async () => { for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); app.setting.close(); return 'ok'; })()"
+	},
+	{
+		"feature": "report",
+		"caption": "The fit report note shows a fits or does not fit cell for each folder and window.",
+		"note": "Projects/Project brief.md",
+		"eval": "(async () => { const p = app.plugins.plugins['token-budget-map']; for (let i = 0; i < 8 && document.querySelector('.modal-container'); i++) { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true })); await new Promise((r) => setTimeout(r, 150)); } if (document.querySelector('.modal-container')) throw new Error('a modal stays open'); for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const keep = app.workspace.getMostRecentLeaf(); app.workspace.getLeavesOfType('markdown').forEach((l) => { if (l !== keep) l.detach(); }); p.settings.activeWindow = 'Small window'; await p.saveSettings(); if (!p.__qaIsPro) { p.__qaIsPro = p.pro.isPro; p.pro.isPro = () => true; [...p.pro.listeners].forEach((l) => l()); } app.workspace.detachLeavesOfType('token-budget-map'); for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); const path = await p.exportReport(); if (!path) throw new Error('no report'); await new Promise((r) => setTimeout(r, 400)); const t = await app.vault.adapter.read(path); if (!t.includes('Whole vault') || !/does not fit|fits/i.test(t)) throw new Error('report ' + t.slice(0, 200)); document.querySelectorAll('.notice-container .notice').forEach((n) => n.remove()); return 'report PASS (QA entitlement)'; })()",
+		"wait": 1500,
+		"after": "(async () => { const p = app.plugins.plugins['token-budget-map']; if (p.__qaIsPro) { p.pro.isPro = p.__qaIsPro; delete p.__qaIsPro; [...p.pro.listeners].forEach((l) => l()); } for (const f of app.vault.getMarkdownFiles().filter((f) => f.path.startsWith('Token budget report'))) await app.vault.delete(f); return 'ok'; })()"
+	}
+]
